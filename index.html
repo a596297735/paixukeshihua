@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>排序可视化</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 0 10px 0 10px;
+            background-color: #000;
+        }
+
+        ul {
+            position: relative;
+            width: 100%;
+            height: 700px;
+        }
+
+        ul:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        li {
+            position: absolute;
+            bottom: 0;
+            width: 5%;
+            font-size: 24px;
+            text-align: center;
+            list-style-type: none;
+            color: #fff;
+            transition: 1.5s;
+        }
+
+        h1 {
+            position: absolute;
+            left: 50%;
+            top: 50px;
+            color: #fff;
+        }
+
+        #btns {
+            margin-top: 50px;
+            padding-left: 45%;
+        }
+
+        #btns button {
+            width: 120px;
+            height: 50px;
+            font-size: 24px;
+            color: #f66;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <h1>排序可视化</h1>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <div id="btns">
+            <button class="shengxu">升序</button>
+            <button class="suiji">随机</button>
+            <button class="jiangxu">降序</button>
+        </div>
+    </div>
+    <script>
+        //升序
+        Array.prototype.shengxu = function () {
+            for (var i = 0, len = this.length; i < len - 1; i++) {
+                var index = i;
+                for (var j = i + 1; j < len; j++) {
+                    if (+this[index].innerText > +this[j].innerText) {
+                        index = j;
+                    }
+                }
+                [this[i], this[index]] = [this[index], this[i]];
+            }
+            return this;
+        }
+
+        //随机
+        Array.prototype.suiji = function () {
+            var length = this.length;
+
+            //每次循环会移动两个数，循环越多越随机
+            for (var i = 0; i < length; i++) {
+                //移动第一个数      
+                var first = this.splice(0, 1);
+                this.splice(parseInt(Math.random() * (length + 1)), 0, first[0])
+
+                //移动最后一个数
+                var last = this.splice(length - 1, 1);
+                this.splice(parseInt(Math.random() * (length + 1)), 0, last[0])
+            }
+            return this;
+        }
+
+        //降序
+        Array.prototype.jiangxu = function () {
+            for (var i = 0, len = this.length; i < len - 1; i++) {
+                var index = i;
+                for (var j = i + 1; j < len; j++) {
+                    if (+this[index].innerText < +this[j].innerText) {
+                        index = j;
+                    }
+                }
+                [this[i], this[index]] = [this[index], this[i]];
+            }
+            return this;
+        }
+        
+        //随机颜色
+        function color() {
+            return `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`;
+        }
+    </script>
+    <script>
+
+        let lis = [...document.querySelectorAll("li")],
+            btns = document.querySelectorAll("#btns button"),
+            height = 30, //  高度比例  1 ： 10px
+            arr = new Array(20).fill(0).map((item, index) => index+1);
+            arr.suiji();
+        lis.forEach((item, index, self) => {
+            item.innerText = arr[index];
+            item['style']['left'] = index * 5 + '%';
+            item['style']['height'] = Number(item.innerText) * height + 'px'; 
+            item['style']['background'] = color();
+        })
+        //升序
+        btns[0].onclick = function () {
+            let lis = [...document.querySelectorAll("li")];
+            lis.shengxu();
+            lis.forEach((item, index, self) => {
+                item['style']['left'] = index * 5 + '%';
+            });
+        }
+
+        //随机
+        btns[1].onclick = function () {
+            let lis = [...document.querySelectorAll("li")];
+            lis.suiji();
+            lis.forEach((item, index, self) => {
+                item['style']['left'] = index * 5 + '%';
+            });
+        }
+
+        //降序
+        btns[2].onclick = function () {
+            let lis = [...document.querySelectorAll("li")];
+            lis.jiangxu();
+            lis.forEach((item, index, self) => {
+                item['style']['left'] = index * 5 + '%';
+            });
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>
